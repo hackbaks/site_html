@@ -7,18 +7,31 @@
   <style>
     /* Daily Paper Clothing - Enhanced Scroll Animations */
     :root {
-      --dp-background: #ffffff;
-      --dp-text: #000000;
+      /* ---------- ROOT : design tokens ---------- */
+      --font-main: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --black: #000;
+      --white: #fff;
+      --grey-light: #e5e5e5;
+      
+      /* Variables existantes pour compatibilité */
+      --dp-background: var(--white);
+      --dp-text: var(--black);
       --dp-border-radius: 26px;
-      --dp-font-body: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --dp-font-body: var(--font-main);
       --dp-font-size-h1: 30px;
       --dp-font-size-h2: 20px;
-      --dp-font-size-body: 12px;
+      --dp-font-size-body: 10px;
+      --dp-line-height: 12px;
+      --dp-font-weight: 400;
+      --dp-letter-spacing: normal;
       --dp-grid-ratio: 4/5;
       --dp-overlay: linear-gradient(63deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3) 100%);
       --transition-speed: 0.35s;
       --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
     }
+
+    /* Import Commuters Sans font */
+    @import url('https://fonts.googleapis.com/css2?family=Commuters+Sans:wght@400&display=swap');
 
     @keyframes fadeInUp {
       from {
@@ -104,10 +117,11 @@
     body {
       font-family: var(--dp-font-body);
       font-size: var(--dp-font-size-body);
-      font-weight: 400;
+      font-weight: var(--dp-font-weight);
       color: var(--dp-text);
       background-color: var(--dp-background);
-      line-height: 1.5;
+      line-height: var(--dp-line-height);
+      letter-spacing: var(--dp-letter-spacing);
       overflow-x: hidden;
     }
 
@@ -186,41 +200,102 @@
       transition: all 0.3s ease;
     }
 
-    .dp-nav.scrolled {
-      padding: 15px 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+.dp-nav.scrolled {
+  padding: 15px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- NAVIGATION ---------- */
+.dp-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  padding: 1.2rem 2rem;
+  font-size: 0.75rem;        /* 12px */
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  list-style: none;
+}
+
+.dp-nav-links a {
+  color: var(--black);
+  text-decoration: none;
+  transition: opacity .2s ease;
+}
+
+    .dp-nav-links a:hover { 
+      opacity: .6; 
     }
 
-    .dp-nav-links {
+    .dp-nav-center {
       display: flex;
+      align-items: center;
       gap: 30px;
-      list-style: none;
     }
 
-    .dp-nav-links a {
-      color: var(--dp-text);
-      text-decoration: none;
-      text-transform: uppercase;
+    .dp-search-container {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 20px;
+      padding: 8px 15px;
+      transition: all var(--transition-speed) var(--ease-out);
+    }
+
+    .dp-search {
+      border: none;
+      background: transparent;
+      font-family: var(--dp-font-body);
       font-size: var(--dp-font-size-body);
-      letter-spacing: 1px;
+      color: var(--dp-text);
+      outline: none;
+      width: 200px;
+      margin-right: 10px;
+    }
+
+    .dp-search::placeholder {
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    .dp-search-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform var(--transition-speed) var(--ease-out);
+    }
+
+    .dp-search-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .dp-nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .dp-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 8px;
+      border-radius: 50%;
       transition: all var(--transition-speed) var(--ease-out);
       position: relative;
-      display: inline-block;
     }
 
-    .dp-nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--dp-text);
-      transition: width var(--transition-speed) var(--ease-out);
+    .dp-icon-btn:hover {
+      background: rgba(0, 0, 0, 0.1);
+      transform: scale(1.1);
     }
 
-    .dp-nav-links a:hover::after {
-      width: 100%;
+    .cart-count {
+      font-size: 10px;
+      font-weight: bold;
+      color: var(--dp-text);
     }
 
     .dp-hero {
@@ -386,18 +461,32 @@
     }
 
     .dp-product-name {
-      font-size: 14px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 5px;
+      font-size: 0.875rem;      /* 14px */
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin: .6rem 0 .2rem;
+      text-transform: capitalize;
       transition: all var(--transition-speed) var(--ease-out);
     }
 
     .dp-product-price {
-      font-size: 12px;
-      font-weight: 400;
+      font-size: 0.8125rem;     /* 13px */
+      font-weight: 500;
+      letter-spacing: 0.03em;
       transition: all var(--transition-speed) var(--ease-out);
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: .5rem;
+      padding: .25rem .55rem;
+      font-size: 0.6875rem;     /* 11px */
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      background: var(--black);
+      border-radius: 2px;
+      text-transform: uppercase;
     }
 
     /* Image Skeleton Loader */
@@ -490,6 +579,115 @@
       margin-top: 80px;
     }
 
+    /* Dark Mode Styles */
+    body.dark-mode {
+      --dp-background: #000000;
+      --dp-text: #ffffff;
+    }
+
+    body.dark-mode .dp-nav {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .dp-search-container {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .dp-search {
+      color: var(--dp-text);
+    }
+
+    body.dark-mode .dp-search::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    body.dark-mode .dp-product-card {
+      background-color: #1a1a1a;
+    }
+
+    body.dark-mode .dp-product-card::before {
+      background: rgba(255, 255, 255, 0);
+    }
+
+    body.dark-mode .dp-product-card:hover::before {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Cart Sidebar */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: var(--dp-background);
+      box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transition: right 0.3s var(--ease-out);
+      overflow-y: auto;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-items {
+      padding: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-size: var(--dp-font-size-body);
+      font-weight: var(--dp-font-weight);
+      margin-bottom: 5px;
+    }
+
+    .cart-item-price {
+      font-size: var(--dp-font-size-body);
+      color: var(--dp-text);
+    }
+
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: all var(--transition-speed) var(--ease-out);
+    }
+
+    .cart-close:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
     @media (max-width: 991px) {
       .dp-hero h1 {
         font-size: 32px;
@@ -503,19 +701,67 @@
       .parallax-content h2 {
         font-size: 28px;
       }
+
+      .dp-nav-center {
+        gap: 15px;
+      }
+
+      .dp-search {
+        width: 150px;
+      }
+
+      .cart-sidebar {
+        width: 350px;
+        right: -350px;
+      }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 600px) {
+      .dp-nav-links { 
+        font-size: 0.6875rem; /* 11px */
+        gap: 1.5rem;
+        padding: 1rem 1.5rem;
+      }
+      
+      .dp-product-name { 
+        font-size: 0.8125rem; /* 13px */
+      }
+      
+      .dp-product-price { 
+        font-size: 0.75rem; /* 12px */
+      }
+
       .dp-hero h1 {
         font-size: 28px;
       }
 
       .dp-product-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
       }
 
       .dp-nav-links {
         display: none;
+      }
+
+      .dp-nav-center {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .dp-search-container {
+        order: -1;
+        margin-bottom: 10px;
+      }
+
+      .dp-search {
+        width: 100%;
+        max-width: 200px;
+      }
+
+      .dp-nav-icons {
+        order: 1;
       }
 
       .parallax-section {
@@ -524,6 +770,15 @@
 
       .parallax-content h2 {
         font-size: 24px;
+      }
+
+      .cart-sidebar {
+        width: 100%;
+        right: -100%;
+      }
+
+      .cart-sidebar.open {
+        right: 0;
       }
     }
   </style>
@@ -536,13 +791,23 @@
   <nav class="dp-nav">
     <div class="dp-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
       <h2>DAILY PAPER</h2>
-      <ul class="dp-nav-links">
-        <li><a href="#new">Nouveau</a></li>
-        <li><a href="#men">Homme</a></li>
-        <li><a href="#women">Femme</a></li>
-        <li><a href="#collection">Collection</a></li>
-        <li><a href="#about">À propos</a></li>
-      </ul>
+      <div class="dp-nav-center">
+        <div class="dp-search-container">
+          <input type="text" class="dp-search" placeholder="Rechercher des produits...">
+          <button class="dp-search-btn">🔍</button>
+        </div>
+        <ul class="dp-nav-links">
+          <li><a href="#new">Nouveau</a></li>
+          <li><a href="#men">Homme</a></li>
+          <li><a href="#women">Femme</a></li>
+          <li><a href="#collection">Collection</a></li>
+          <li><a href="#about">À propos</a></li>
+        </ul>
+      </div>
+      <div class="dp-nav-icons">
+        <button class="dp-icon-btn" id="cart-btn">🛒 (<span class="cart-count">0</span>)</button>
+        <button class="dp-icon-btn" id="theme-toggle">🌙</button>
+      </div>
     </div>
   </nav>
 
@@ -624,240 +889,4 @@
           </div>
         </div>
         <div class="dp-product-info">
-          <div class="dp-product-name">Chemise Motifs</div>
-          <div class="dp-product-price">€139.00</div>
-        </div>
-      </div>
-
-      <!-- Product 6 -->
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=1000&fit=crop" alt="Jogging Confort" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Jogging Premium</div>
-          <div class="dp-product-price">€119.00</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Parallax Section -->
-  <section class="parallax-section scroll-reveal-scale">
-    <div class="parallax-bg"></div>
-    <div class="parallax-content">
-      <h2 class="scroll-reveal">CULTURE & STYLE</h2>
-      <p class="scroll-reveal">Daily Paper célèbre la richesse de la culture africaine à travers des designs contemporains et audacieux.</p>
-      <button class="dp-button dp-button-outline scroll-reveal" style="background: transparent; color: white; border-color: white;">Découvrir Notre Histoire</button>
-    </div>
-  </section>
-
-  <!-- More Products -->
-  <section class="dp-container">
-    <h2 class="scroll-reveal" style="margin-bottom: 30px;">NOUVEAUTÉS</h2>
-    <div class="dp-product-grid">
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1624378515195-6bbdb73dff1a?w=800&h=1000&fit=crop" alt="Veste Bomber" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Bomber Édition</div>
-          <div class="dp-product-price">€199.00</div>
-        </div>
-      </div>
-
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&h=1000&fit=crop" alt="Sweat Brodé" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Sweat Brodé</div>
-          <div class="dp-product-price">€159.00</div>
-        </div>
-      </div>
-
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1602293589930-45aad59ba3ab?w=800&h=1000&fit=crop" alt="Short Sport" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Short Actif</div>
-          <div class="dp-product-price">€89.00</div>
-        </div>
-      </div>
-
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&h=1000&fit=crop" alt="Accessoire" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Casquette Logo</div>
-          <div class="dp-product-price">€59.00</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="dp-container scroll-reveal">
-      <p style="text-align: center; margin-bottom: 20px;">© 2026 Daily Paper. Tous droits réservés.</p>
-      <p style="text-align: center; font-size: 11px; color: rgba(0,0,0,0.6);">
-        <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Mentions Légales</a>
-        <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Confidentialité</a>
-        <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Contact</a>
-      </p>
-    </div>
-  </footer>
-
-  <script>
-    // Scroll Progress Bar
-    function updateScrollProgress() {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
-    }
-
-    // Scroll Reveal Animation
-    function revealOnScroll() {
-      const reveals = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .stagger-item');
-      
-      reveals.forEach((element, index) => {
-        const elementTop = element.getBoundingClientRect().top;
-        const elementVisible = 150;
-        
-        if (elementTop < window.innerHeight - elementVisible) {
-          // Add stagger delay for stagger-item elements
-          if (element.classList.contains('stagger-item')) {
-            setTimeout(() => {
-              element.classList.add('revealed');
-            }, index * 100);
-          } else {
-            element.classList.add('revealed');
-          }
-        }
-      });
-    }
-
-    // Navbar Scroll Effect
-    function handleNavScroll() {
-      const nav = document.querySelector('.dp-nav');
-      if (window.scrollY > 50) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
-    }
-
-    // Parallax Effect
-    function handleParallax() {
-      const parallaxSections = document.querySelectorAll('.parallax-section');
-      
-      parallaxSections.forEach(section => {
-        const scrolled = window.scrollY;
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        
-        if (scrolled > sectionTop - window.innerHeight && scrolled < sectionTop + sectionHeight) {
-          const parallaxBg = section.querySelector('.parallax-bg');
-          const offset = (scrolled - sectionTop) * 0.5;
-          parallaxBg.style.transform = `translateY(${offset}px)`;
-        }
-      });
-    }
-
-    // Progressive Image Loading
-    function setupImageLoading() {
-      const productCards = document.querySelectorAll('.dp-product-card');
-      
-      productCards.forEach(card => {
-        const img = card.querySelector('img');
-        
-        // Check if image is already loaded
-        if (img.complete) {
-          card.classList.add('image-loaded');
-        } else {
-          img.addEventListener('load', () => {
-            setTimeout(() => {
-              card.classList.add('image-loaded');
-            }, 200);
-          });
-        }
-      });
-    }
-
-    // Intersection Observer for better performance (bidirectional)
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-        } else {
-          // Remove revealed class when scrolling back up
-          entry.target.classList.remove('revealed');
-        }
-      });
-    }, observerOptions);
-
-    // Observe all reveal elements
-    document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Stagger animation with delay (bidirectional)
-    const staggerItems = document.querySelectorAll('.stagger-item');
-    const staggerObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const index = Array.from(staggerItems).indexOf(entry.target);
-          setTimeout(() => {
-            entry.target.classList.add('revealed');
-          }, index * 150);
-        } else {
-          // Remove revealed class when scrolling back up
-          entry.target.classList.remove('revealed');
-        }
-      });
-    }, observerOptions);
-
-    staggerItems.forEach(item => staggerObserver.observe(item));
-
-    // Event Listeners
-    window.addEventListener('scroll', () => {
-      updateScrollProgress();
-      handleNavScroll();
-      handleParallax();
-    });
-
-    window.addEventListener('load', () => {
-      revealOnScroll();
-      setupImageLoading();
-    });
-
-    // Initial calls
-    revealOnScroll();
-    setupImageLoading();
-    updateScrollProgress();
-  </script>
-</body>
-</html>
+    
