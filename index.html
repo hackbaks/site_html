@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Paper - Animations Scroll Ultra</title>
+  <title>Daily Paper - Animations Scroll</title>
   <style>
-    /* Daily Paper Clothing - ULTRA Enhanced Scroll Animations */
+    /* Daily Paper Clothing - Enhanced Scroll Animations */
     :root {
       --dp-background: #ffffff;
       --dp-text: #000000;
@@ -31,6 +31,39 @@
       }
     }
 
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
     @keyframes shimmer {
       0% {
         background-position: -1000px 0;
@@ -40,63 +73,21 @@
       }
     }
 
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0) rotate(0deg);
-      }
-      33% {
-        transform: translateY(-15px) rotate(2deg);
-      }
-      66% {
-        transform: translateY(-8px) rotate(-1deg);
-      }
-    }
-
-    @keyframes rotate3d {
+    @keyframes revealImage {
       0% {
-        transform: perspective(1000px) rotateY(0deg);
+        clip-path: inset(0 100% 0 0);
       }
       100% {
-        transform: perspective(1000px) rotateY(360deg);
+        clip-path: inset(0 0 0 0);
       }
     }
 
-    @keyframes glitch {
-      0%, 100% {
-        transform: translate(0);
-      }
-      20% {
-        transform: translate(-2px, 2px);
-      }
-      40% {
-        transform: translate(-2px, -2px);
-      }
-      60% {
-        transform: translate(2px, 2px);
-      }
-      80% {
-        transform: translate(2px, -2px);
-      }
-    }
-
-    @keyframes backgroundShift {
+    @keyframes slideUpReveal {
       0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
+        transform: translateY(100%);
       }
       100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    @keyframes morphBorder {
-      0%, 100% {
-        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-      }
-      50% {
-        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+        transform: translateY(0);
       }
     }
 
@@ -118,45 +109,6 @@
       background-color: var(--dp-background);
       line-height: 1.5;
       overflow-x: hidden;
-      position: relative;
-    }
-
-    /* Animated Background Orbs */
-    .bg-orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
-      pointer-events: none;
-      z-index: 0;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .bg-orb-1 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, #ff6b6b, #ee5a6f);
-      top: -250px;
-      left: -250px;
-      animation-delay: 0s;
-    }
-
-    .bg-orb-2 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, #4ecdc4, #44a08d);
-      bottom: -200px;
-      right: -200px;
-      animation-delay: 2s;
-    }
-
-    .bg-orb-3 {
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle, #f7b731, #fed330);
-      top: 50%;
-      right: -175px;
-      animation-delay: 4s;
     }
 
     h1 {
@@ -177,8 +129,6 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 0 20px;
-      position: relative;
-      z-index: 1;
     }
 
     .dp-button {
@@ -211,29 +161,14 @@
       transition: width 0.6s, height 0.6s;
     }
 
-    .dp-button::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.5s;
-    }
-
     .dp-button:hover::before {
       width: 300px;
       height: 300px;
     }
 
-    .dp-button:hover::after {
-      left: 100%;
-    }
-
     .dp-button:hover {
       background-color: #333;
-      transform: translateY(-4px) scale(1.05);
+      transform: translateY(-4px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
@@ -243,18 +178,17 @@
       align-items: center;
       padding: 20px 0;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 100;
       background: rgba(255, 255, 255, 0.95);
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
     }
 
     .dp-nav.scrolled {
       padding: 15px 0;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 
     .dp-nav-links {
@@ -278,20 +212,15 @@
       content: '';
       position: absolute;
       bottom: -2px;
-      left: 50%;
+      left: 0;
       width: 0;
       height: 2px;
       background: var(--dp-text);
-      transition: all var(--transition-speed) var(--ease-out);
-      transform: translateX(-50%);
+      transition: width var(--transition-speed) var(--ease-out);
     }
 
     .dp-nav-links a:hover::after {
       width: 100%;
-    }
-
-    .dp-nav-links a:hover {
-      transform: translateY(-2px);
     }
 
     .dp-hero {
@@ -323,60 +252,51 @@
     .dp-hero h1 {
       font-size: 48px;
       margin-bottom: 20px;
-      background: linear-gradient(135deg, #000, #333, #000);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: backgroundShift 5s ease infinite;
     }
 
-    /* Scroll Reveal Elements - ENHANCED */
+    /* Scroll Reveal Elements */
     .scroll-reveal {
       opacity: 0;
-      transform: translateY(80px) scale(0.9) rotateX(10deg);
-      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-      transform-style: preserve-3d;
+      transform: translateY(60px);
+      transition: all 0.8s var(--ease-out);
     }
 
     .scroll-reveal.revealed {
       opacity: 1;
-      transform: translateY(0) scale(1) rotateX(0deg);
+      transform: translateY(0);
     }
 
     .scroll-reveal-left {
       opacity: 0;
-      transform: translateX(-100px) rotateY(20deg);
-      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      transform-style: preserve-3d;
+      transform: translateX(-80px);
+      transition: all 0.9s var(--ease-out);
     }
 
     .scroll-reveal-left.revealed {
       opacity: 1;
-      transform: translateX(0) rotateY(0deg);
+      transform: translateX(0);
     }
 
     .scroll-reveal-right {
       opacity: 0;
-      transform: translateX(100px) rotateY(-20deg);
-      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      transform-style: preserve-3d;
+      transform: translateX(80px);
+      transition: all 0.9s var(--ease-out);
     }
 
     .scroll-reveal-right.revealed {
       opacity: 1;
-      transform: translateX(0) rotateY(0deg);
+      transform: translateX(0);
     }
 
     .scroll-reveal-scale {
       opacity: 0;
-      transform: scale(0.7) rotate(-5deg);
-      transition: all 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.85);
+      transition: all 1s var(--ease-out);
     }
 
     .scroll-reveal-scale.revealed {
       opacity: 1;
-      transform: scale(1) rotate(0deg);
+      transform: scale(1);
     }
 
     /* Product Grid */
@@ -394,17 +314,14 @@
       cursor: pointer;
       background-color: #f9f9f9;
       border-radius: 4px;
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      transform-style: preserve-3d;
+      transition: all var(--transition-speed) var(--ease-out);
     }
 
     .dp-product-card-wrapper {
       position: relative;
       overflow: hidden;
-      height: 100%;
     }
 
-    /* Multi-layer shimmer effect */
     .dp-product-card-wrapper::before {
       content: '';
       position: absolute;
@@ -412,14 +329,8 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.3) 25%,
-        rgba(255, 255, 255, 0.6) 50%,
-        rgba(255, 255, 255, 0.3) 75%,
-        transparent
-      );
-      transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      transition: left 0.6s;
       z-index: 3;
       pointer-events: none;
     }
@@ -428,45 +339,19 @@
       left: 100%;
     }
 
-    /* Glitch effect on reveal */
-    .dp-product-card.revealed {
-      animation: glitch 0.3s 0.5s;
-    }
-
     .dp-product-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.7s var(--ease-out), filter 0.6s var(--ease-out);
       display: block;
-      filter: blur(30px) brightness(1.2) saturate(0.5);
-      transform: scale(1.15);
+      filter: blur(20px) brightness(1.1);
+      transform: scale(1.1);
     }
 
     .dp-product-card.image-loaded img {
-      filter: blur(0) brightness(1) saturate(1);
+      filter: blur(0) brightness(1);
       transform: scale(1);
-    }
-
-    /* Animated border on hover */
-    .dp-product-card::after {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #f7b731, #ff6b6b);
-      background-size: 400% 400%;
-      border-radius: 4px;
-      opacity: 0;
-      z-index: -1;
-      transition: opacity 0.5s;
-      animation: backgroundShift 3s ease infinite;
-    }
-
-    .dp-product-card:hover::after {
-      opacity: 0.8;
     }
 
     .dp-product-card::before {
@@ -483,8 +368,8 @@
     }
 
     .dp-product-card:hover {
-      transform: translateY(-12px) rotateY(5deg) rotateX(5deg) scale(1.02);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     .dp-product-card:hover::before {
@@ -492,14 +377,12 @@
     }
 
     .dp-product-card:hover img {
-      transform: scale(1.12) rotate(2deg);
-      filter: blur(0) brightness(1.05) saturate(1.1);
+      transform: scale(1.08) rotate(1deg);
     }
 
     .dp-product-info {
       padding: 15px 0;
       text-align: center;
-      transition: all 0.4s var(--ease-out);
     }
 
     .dp-product-name {
@@ -511,24 +394,13 @@
       transition: all var(--transition-speed) var(--ease-out);
     }
 
-    .dp-product-card:hover .dp-product-name {
-      color: #333;
-      letter-spacing: 2px;
-      transform: translateY(-2px);
-    }
-
     .dp-product-price {
       font-size: 12px;
       font-weight: 400;
       transition: all var(--transition-speed) var(--ease-out);
     }
 
-    .dp-product-card:hover .dp-product-price {
-      font-weight: 600;
-      transform: scale(1.1);
-    }
-
-    /* Morphing skeleton loader */
+    /* Image Skeleton Loader */
     .dp-skeleton {
       position: absolute;
       top: 0;
@@ -537,7 +409,7 @@
       height: 100%;
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
       background-size: 200% 100%;
-      animation: shimmer 2s infinite, morphBorder 4s ease-in-out infinite;
+      animation: shimmer 2s infinite;
       z-index: 1;
     }
 
@@ -545,7 +417,7 @@
       display: none;
     }
 
-    /* Parallax Section - ULTRA Enhanced */
+    /* Parallax Section */
     .parallax-section {
       height: 60vh;
       position: relative;
@@ -562,23 +434,9 @@
       left: 0;
       width: 100%;
       height: 140%;
-      background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
-      background-size: 200% 200%;
+      background: linear-gradient(135deg, #000 0%, #333 100%);
       z-index: 0;
       transition: transform 0.1s ease-out;
-      animation: backgroundShift 15s ease infinite;
-    }
-
-    .parallax-bg::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 30% 50%, rgba(255, 107, 107, 0.2), transparent 50%),
-                  radial-gradient(circle at 70% 50%, rgba(78, 205, 196, 0.2), transparent 50%);
-      animation: float 10s ease-in-out infinite;
     }
 
     .parallax-content {
@@ -593,80 +451,43 @@
       font-size: 36px;
       margin-bottom: 20px;
       color: white;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
     .parallax-content p {
       font-size: 16px;
       max-width: 600px;
       margin: 0 auto 30px;
-      color: rgba(255, 255, 255, 0.95);
+      color: rgba(255, 255, 255, 0.9);
     }
 
-    /* Stagger Animation - ENHANCED */
+    /* Stagger Animation */
     .stagger-item {
       opacity: 0;
-      transform: translateY(60px) rotateX(15deg) scale(0.95);
-      transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-      transform-style: preserve-3d;
+      transform: translateY(40px);
+      transition: all 0.6s var(--ease-out);
     }
 
     .stagger-item.revealed {
       opacity: 1;
-      transform: translateY(0) rotateX(0deg) scale(1);
+      transform: translateY(0);
     }
 
-    /* 3D Floating elements */
-    .float-element {
-      animation: float 6s ease-in-out infinite;
-    }
-
-    /* Progress Indicator with gradient */
+    /* Progress Indicator */
     .scroll-progress {
       position: fixed;
       top: 0;
       left: 0;
       width: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #f7b731);
-      background-size: 200% 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #000, #666);
       z-index: 1001;
       transition: width 0.1s ease-out;
-      animation: backgroundShift 3s ease infinite;
-      box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
-    }
-
-    /* Mouse follower cursor effect */
-    .cursor-follower {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(0, 0, 0, 0.3);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transition: all 0.15s ease-out;
-      transform: translate(-50%, -50%);
-    }
-
-    .cursor-dot {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
-      transition: all 0.05s ease-out;
-      transform: translate(-50%, -50%);
     }
 
     footer {
       padding: 60px 0;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       margin-top: 80px;
-      position: relative;
-      z-index: 1;
     }
 
     @media (max-width: 991px) {
@@ -681,10 +502,6 @@
 
       .parallax-content h2 {
         font-size: 28px;
-      }
-
-      .bg-orb {
-        filter: blur(60px);
       }
     }
 
@@ -708,30 +525,17 @@
       .parallax-content h2 {
         font-size: 24px;
       }
-
-      .cursor-follower, .cursor-dot {
-        display: none;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Animated Background Orbs -->
-  <div class="bg-orb bg-orb-1"></div>
-  <div class="bg-orb bg-orb-2"></div>
-  <div class="bg-orb bg-orb-3"></div>
-
-  <!-- Custom Cursor -->
-  <div class="cursor-follower"></div>
-  <div class="cursor-dot"></div>
-
   <!-- Scroll Progress Bar -->
   <div class="scroll-progress"></div>
 
   <!-- Navigation -->
   <nav class="dp-nav">
     <div class="dp-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-      <h2 class="float-element">DAILY PAPER</h2>
+      <h2>DAILY PAPER</h2>
       <ul class="dp-nav-links">
         <li><a href="#new">Nouveau</a></li>
         <li><a href="#men">Homme</a></li>
@@ -745,7 +549,7 @@
   <!-- Hero Section -->
   <section class="dp-hero">
     <div class="dp-hero-content">
-      <h1 class="scroll-reveal float-element">NOUVELLE COLLECTION 2026</h1>
+      <h1 class="scroll-reveal">NOUVELLE COLLECTION 2026</h1>
       <p class="scroll-reveal">Découvrez notre dernière collection inspirée de l'Afrique</p>
       <button class="dp-button scroll-reveal">Explorer Maintenant</button>
     </div>
@@ -761,6 +565,105 @@
           <div class="dp-product-card-wrapper">
             <div class="dp-skeleton"></div>
             <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&h=1000&fit=crop" alt="Veste Africaine" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Veste Heritage</div>
+          <div class="dp-product-price">€189.00</div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=1000&fit=crop" alt="Hoodie Daily Paper" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Hoodie Essentiel</div>
+          <div class="dp-product-price">€129.00</div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&h=1000&fit=crop" alt="Pantalon Cargo" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Cargo Urbain</div>
+          <div class="dp-product-price">€149.00</div>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&h=1000&fit=crop" alt="T-shirt Daily Paper" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">T-shirt Signature</div>
+          <div class="dp-product-price">€79.00</div>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1622445275576-721325763afe?w=800&h=1000&fit=crop" alt="Chemise Motifs" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Chemise Motifs</div>
+          <div class="dp-product-price">€139.00</div>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=1000&fit=crop" alt="Jogging Confort" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Jogging Premium</div>
+          <div class="dp-product-price">€119.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parallax Section -->
+  <section class="parallax-section scroll-reveal-scale">
+    <div class="parallax-bg"></div>
+    <div class="parallax-content">
+      <h2 class="scroll-reveal">CULTURE & STYLE</h2>
+      <p class="scroll-reveal">Daily Paper célèbre la richesse de la culture africaine à travers des designs contemporains et audacieux.</p>
+      <button class="dp-button dp-button-outline scroll-reveal" style="background: transparent; color: white; border-color: white;">Découvrir Notre Histoire</button>
+    </div>
+  </section>
+
+  <!-- More Products -->
+  <section class="dp-container">
+    <h2 class="scroll-reveal" style="margin-bottom: 30px;">NOUVEAUTÉS</h2>
+    <div class="dp-product-grid">
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1624378515195-6bbdb73dff1a?w=800&h=1000&fit=crop" alt="Veste Bomber" loading="lazy">
           </div>
         </div>
         <div class="dp-product-info">
@@ -807,112 +710,13 @@
           <div class="dp-product-price">€59.00</div>
         </div>
       </div>
-
-      <!-- Product 5 -->
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=1000&fit=crop" alt="Hoodie Daily Paper" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Hoodie Essentiel</div>
-          <div class="dp-product-price">€129.00</div>
-        </div>
-      </div>
-
-      <!-- Product 6 -->
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&h=1000&fit=crop" alt="Pantalon Cargo" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Cargo Urbain</div>
-          <div class="dp-product-price">€149.00</div>
-        </div>
-      </div>
-
-      <!-- Product 7 -->
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&h=1000&fit=crop" alt="T-shirt Daily Paper" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">T-shirt Signature</div>
-          <div class="dp-product-price">€79.00</div>
-        </div>
-      </div>
-
-      <!-- Product 8 -->
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1622445275576-721325763afe?w=800&h=1000&fit=crop" alt="Chemise Motifs" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Chemise Motifs</div>
-          <div class="dp-product-price">€139.00</div>
-        </div>
-      </div>
-
-      <!-- Product 9 -->
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=1000&fit=crop" alt="Jogging Confort" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Jogging Premium</div>
-          <div class="dp-product-price">€119.00</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Parallax Section -->
-  <section class="parallax-section scroll-reveal-scale">
-    <div class="parallax-bg"></div>
-    <div class="parallax-content">
-      <h2 class="scroll-reveal">CULTURE & STYLE</h2>
-      <p class="scroll-reveal">Daily Paper célèbre la richesse de la culture africaine à travers des designs contemporains et audacieux.</p>
-      <button class="dp-button scroll-reveal" style="background: transparent; color: white; border: 1px solid white;">Découvrir Notre Histoire</button>
-    </div>
-  </section>
-
-  <!-- More Products -->
-  <section class="dp-container">
-    <h2 class="scroll-reveal" style="margin-bottom: 30px;">NOUVEAUTÉS</h2>
-    <div class="dp-product-grid">
-      <div class="stagger-item">
-        <div class="dp-product-card">
-          <div class="dp-product-card-wrapper">
-            <div class="dp-skeleton"></div>
-            <img src="https://images.unsplash.com/photo-1624378515195-6bbdb73dff1a?w=800&h=1000&fit=crop" alt="Veste Bomber" loading="lazy">
-          </div>
-        </div>
-        <div class="dp-product-info">
-          <div class="dp-product-name">Veste Heritage</div>
-          <div class="dp-product-price">€189.00</div>
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="dp-container scroll-reveal">
-      <p style="text-align: center; margin-bottom: 20px;"> 2026 Daily Paper. Tous droits réservés.</p>
+      <p style="text-align: center; margin-bottom: 20px;">© 2026 Daily Paper. Tous droits réservés.</p>
       <p style="text-align: center; font-size: 11px; color: rgba(0,0,0,0.6);">
         <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Mentions Légales</a>
         <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Confidentialité</a>
@@ -922,53 +726,33 @@
   </footer>
 
   <script>
-    // Custom Cursor Effect
-    const cursorFollower = document.querySelector('.cursor-follower');
-    const cursorDot = document.querySelector('.cursor-dot');
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
-    let dotX = 0, dotY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      dotX = e.clientX;
-      dotY = e.clientY;
-    });
-
-    function animateCursor() {
-      followerX += (mouseX - followerX) * 0.1;
-      followerY += (mouseY - followerY) * 0.1;
-      
-      cursorFollower.style.left = followerX + 'px';
-      cursorFollower.style.top = followerY + 'px';
-      cursorDot.style.left = dotX + 'px';
-      cursorDot.style.top = dotY + 'px';
-      
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-
-    // Expand cursor on hover
-    document.querySelectorAll('a, button, .dp-product-card').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursorFollower.style.width = '50px';
-        cursorFollower.style.height = '50px';
-        cursorFollower.style.borderColor = 'rgba(0, 0, 0, 0.6)';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursorFollower.style.width = '20px';
-        cursorFollower.style.height = '20px';
-        cursorFollower.style.borderColor = 'rgba(0, 0, 0, 0.3)';
-      });
-    });
-
     // Scroll Progress Bar
     function updateScrollProgress() {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
       document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+    }
+
+    // Scroll Reveal Animation
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .stagger-item');
+      
+      reveals.forEach((element, index) => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          // Add stagger delay for stagger-item elements
+          if (element.classList.contains('stagger-item')) {
+            setTimeout(() => {
+              element.classList.add('revealed');
+            }, index * 100);
+          } else {
+            element.classList.add('revealed');
+          }
+        }
+      });
     }
 
     // Navbar Scroll Effect
@@ -981,7 +765,7 @@
       }
     }
 
-    // Enhanced Parallax Effect with mouse tracking
+    // Parallax Effect
     function handleParallax() {
       const parallaxSections = document.querySelectorAll('.parallax-section');
       
@@ -998,37 +782,21 @@
       });
     }
 
-    // Mouse parallax effect
-    document.addEventListener('mousemove', (e) => {
-      const parallaxSections = document.querySelectorAll('.parallax-section');
-      
-      parallaxSections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          const parallaxBg = section.querySelector('.parallax-bg');
-          const xMove = (e.clientX - window.innerWidth / 2) * 0.02;
-          const yMove = (e.clientY - window.innerHeight / 2) * 0.02;
-          parallaxBg.style.transform += ` translate(${xMove}px, ${yMove}px)`;
-        }
-      });
-    });
-
-    // Progressive Image Loading with enhanced effect
+    // Progressive Image Loading
     function setupImageLoading() {
       const productCards = document.querySelectorAll('.dp-product-card');
       
       productCards.forEach(card => {
         const img = card.querySelector('img');
         
+        // Check if image is already loaded
         if (img.complete) {
-          setTimeout(() => {
-            card.classList.add('image-loaded');
-          }, 300);
+          card.classList.add('image-loaded');
         } else {
           img.addEventListener('load', () => {
             setTimeout(() => {
               card.classList.add('image-loaded');
-            }, 300);
+            }, 200);
           });
         }
       });
@@ -1036,8 +804,8 @@
 
     // Intersection Observer for better performance (bidirectional)
     const observerOptions = {
-      threshold: 0.15,
-      rootMargin: '0px 0px -50px 0px'
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -1045,6 +813,7 @@
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
         } else {
+          // Remove revealed class when scrolling back up
           entry.target.classList.remove('revealed');
         }
       });
@@ -1060,50 +829,18 @@
     const staggerObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const allStaggerItems = Array.from(document.querySelectorAll('.stagger-item'));
-          const index = allStaggerItems.indexOf(entry.target);
-          const parentGrid = entry.target.closest('.dp-product-grid');
-          const gridItems = Array.from(parentGrid.querySelectorAll('.stagger-item'));
-          const gridIndex = gridItems.indexOf(entry.target);
-          
+          const index = Array.from(staggerItems).indexOf(entry.target);
           setTimeout(() => {
             entry.target.classList.add('revealed');
-          }, gridIndex * 150);
+          }, index * 150);
         } else {
+          // Remove revealed class when scrolling back up
           entry.target.classList.remove('revealed');
         }
       });
     }, observerOptions);
 
     staggerItems.forEach(item => staggerObserver.observe(item));
-
-    // Smooth scroll for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-
-    // Background orbs mouse tracking
-    document.addEventListener('mousemove', (e) => {
-      const orbs = document.querySelectorAll('.bg-orb');
-      const xPercent = e.clientX / window.innerWidth;
-      const yPercent = e.clientY / window.innerHeight;
-      
-      orbs.forEach((orb, index) => {
-        const speed = (index + 1) * 0.5;
-        const x = (xPercent - 0.5) * 50 * speed;
-        const y = (yPercent - 0.5) * 50 * speed;
-        orb.style.transform = `translate(${x}px, ${y}px)`;
-      });
-    });
 
     // Event Listeners
     window.addEventListener('scroll', () => {
@@ -1113,23 +850,14 @@
     });
 
     window.addEventListener('load', () => {
+      revealOnScroll();
       setupImageLoading();
     });
 
     // Initial calls
+    revealOnScroll();
     setupImageLoading();
     updateScrollProgress();
-
-    // Add smooth reveal for elements already in viewport on load
-    setTimeout(() => {
-      const inViewElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale');
-      inViewElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          el.classList.add('revealed');
-        }
-      });
-    }, 100);
   </script>
 </body>
 </html>
