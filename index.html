@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Paper - Animations Scroll</title>
+  <style>
+    /* Daily Paper Clothing - Enhanced Scroll Animations */
+    :root {
+      --dp-background: #ffffff;
+      --dp-text: #000000;
+      --dp-border-radius: 26px;
+      --dp-font-body: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --dp-font-size-h1: 30px;
+      --dp-font-size-h2: 20px;
+      --dp-font-size-body: 12px;
+      --dp-grid-ratio: 4/5;
+      --dp-overlay: linear-gradient(63deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3) 100%);
+      --transition-speed: 0.35s;
+      --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
+    @keyframes revealImage {
+      0% {
+        clip-path: inset(0 100% 0 0);
+      }
+      100% {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    @keyframes slideUpReveal {
+      0% {
+        transform: translateY(100%);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--dp-font-body);
+      font-size: var(--dp-font-size-body);
+      font-weight: 400;
+      color: var(--dp-text);
+      background-color: var(--dp-background);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: var(--dp-font-size-h1);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: var(--dp-font-size-h2);
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .dp-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .dp-button {
+      background-color: var(--dp-text);
+      color: var(--dp-background);
+      border: none;
+      border-radius: var(--dp-border-radius);
+      padding: 14px 32px;
+      font-size: var(--dp-font-size-body);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all var(--transition-speed) var(--ease-out);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dp-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .dp-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .dp-button:hover {
+      background-color: #333;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .dp-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      transition: all 0.3s ease;
+    }
+
+    .dp-nav.scrolled {
+      padding: 15px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .dp-nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .dp-nav-links a {
+      color: var(--dp-text);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: var(--dp-font-size-body);
+      letter-spacing: 1px;
+      transition: all var(--transition-speed) var(--ease-out);
+      position: relative;
+      display: inline-block;
+    }
+
+    .dp-nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--dp-text);
+      transition: width var(--transition-speed) var(--ease-out);
+    }
+
+    .dp-nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .dp-hero {
+      position: relative;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+      overflow: hidden;
+    }
+
+    .dp-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(0, 0, 0, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .dp-hero-content {
+      text-align: center;
+      z-index: 2;
+    }
+
+    .dp-hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    /* Scroll Reveal Elements */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.8s var(--ease-out);
+    }
+
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal-left {
+      opacity: 0;
+      transform: translateX(-80px);
+      transition: all 0.9s var(--ease-out);
+    }
+
+    .scroll-reveal-left.revealed {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scroll-reveal-right {
+      opacity: 0;
+      transform: translateX(80px);
+      transition: all 0.9s var(--ease-out);
+    }
+
+    .scroll-reveal-right.revealed {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scroll-reveal-scale {
+      opacity: 0;
+      transform: scale(0.85);
+      transition: all 1s var(--ease-out);
+    }
+
+    .scroll-reveal-scale.revealed {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Product Grid */
+    .dp-product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 60px 0;
+    }
+
+    .dp-product-card {
+      position: relative;
+      aspect-ratio: var(--dp-grid-ratio);
+      overflow: hidden;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      transition: all var(--transition-speed) var(--ease-out);
+    }
+
+    .dp-product-card-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dp-product-card-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      transition: left 0.6s;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .dp-product-card.revealed .dp-product-card-wrapper::before {
+      left: 100%;
+    }
+
+    .dp-product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease-out), filter 0.6s var(--ease-out);
+      display: block;
+      filter: blur(20px) brightness(1.1);
+      transform: scale(1.1);
+    }
+
+    .dp-product-card.image-loaded img {
+      filter: blur(0) brightness(1);
+      transform: scale(1);
+    }
+
+    .dp-product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.5s var(--ease-out);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .dp-product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .dp-product-card:hover::before {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .dp-product-card:hover img {
+      transform: scale(1.08) rotate(1deg);
+    }
+
+    .dp-product-info {
+      padding: 15px 0;
+      text-align: center;
+    }
+
+    .dp-product-name {
+      font-size: 14px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+      transition: all var(--transition-speed) var(--ease-out);
+    }
+
+    .dp-product-price {
+      font-size: 12px;
+      font-weight: 400;
+      transition: all var(--transition-speed) var(--ease-out);
+    }
+
+    /* Image Skeleton Loader */
+    .dp-skeleton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+      z-index: 1;
+    }
+
+    .dp-product-card.image-loaded .dp-skeleton {
+      display: none;
+    }
+
+    /* Parallax Section */
+    .parallax-section {
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 80px 0;
+    }
+
+    .parallax-bg {
+      position: absolute;
+      top: -20%;
+      left: 0;
+      width: 100%;
+      height: 140%;
+      background: linear-gradient(135deg, #000 0%, #333 100%);
+      z-index: 0;
+      transition: transform 0.1s ease-out;
+    }
+
+    .parallax-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .parallax-content h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .parallax-content p {
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Stagger Animation */
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.6s var(--ease-out);
+    }
+
+    .stagger-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Progress Indicator */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #000, #666);
+      z-index: 1001;
+      transition: width 0.1s ease-out;
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      margin-top: 80px;
+    }
+
+    @media (max-width: 991px) {
+      .dp-hero h1 {
+        font-size: 32px;
+      }
+
+      .dp-product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .parallax-content h2 {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .dp-hero h1 {
+        font-size: 28px;
+      }
+
+      .dp-product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dp-nav-links {
+        display: none;
+      }
+
+      .parallax-section {
+        height: 50vh;
+      }
+
+      .parallax-content h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress"></div>
+
+  <!-- Navigation -->
+  <nav class="dp-nav">
+    <div class="dp-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <h2>DAILY PAPER</h2>
+      <ul class="dp-nav-links">
+        <li><a href="#new">Nouveau</a></li>
+        <li><a href="#men">Homme</a></li>
+        <li><a href="#women">Femme</a></li>
+        <li><a href="#collection">Collection</a></li>
+        <li><a href="#about">À propos</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="dp-hero">
+    <div class="dp-hero-content">
+      <h1 class="scroll-reveal">NOUVELLE COLLECTION 2026</h1>
+      <p class="scroll-reveal">Découvrez notre dernière collection inspirée de l'Afrique</p>
+      <button class="dp-button scroll-reveal">Explorer Maintenant</button>
+    </div>
+  </section>
+
+  <!-- Product Grid Section -->
+  <section class="dp-container">
+    <h2 class="scroll-reveal" style="margin-bottom: 30px;">PRODUITS PHARES</h2>
+    <div class="dp-product-grid">
+      <!-- Product 1 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&h=1000&fit=crop" alt="Veste Africaine" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Veste Heritage</div>
+          <div class="dp-product-price">€189.00</div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=1000&fit=crop" alt="Hoodie Daily Paper" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Hoodie Essentiel</div>
+          <div class="dp-product-price">€129.00</div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&h=1000&fit=crop" alt="Pantalon Cargo" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Cargo Urbain</div>
+          <div class="dp-product-price">€149.00</div>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&h=1000&fit=crop" alt="T-shirt Daily Paper" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">T-shirt Signature</div>
+          <div class="dp-product-price">€79.00</div>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1622445275576-721325763afe?w=800&h=1000&fit=crop" alt="Chemise Motifs" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Chemise Motifs</div>
+          <div class="dp-product-price">€139.00</div>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=1000&fit=crop" alt="Jogging Confort" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Jogging Premium</div>
+          <div class="dp-product-price">€119.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parallax Section -->
+  <section class="parallax-section scroll-reveal-scale">
+    <div class="parallax-bg"></div>
+    <div class="parallax-content">
+      <h2 class="scroll-reveal">CULTURE & STYLE</h2>
+      <p class="scroll-reveal">Daily Paper célèbre la richesse de la culture africaine à travers des designs contemporains et audacieux.</p>
+      <button class="dp-button dp-button-outline scroll-reveal" style="background: transparent; color: white; border-color: white;">Découvrir Notre Histoire</button>
+    </div>
+  </section>
+
+  <!-- More Products -->
+  <section class="dp-container">
+    <h2 class="scroll-reveal" style="margin-bottom: 30px;">NOUVEAUTÉS</h2>
+    <div class="dp-product-grid">
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1624378515195-6bbdb73dff1a?w=800&h=1000&fit=crop" alt="Veste Bomber" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Bomber Édition</div>
+          <div class="dp-product-price">€199.00</div>
+        </div>
+      </div>
+
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&h=1000&fit=crop" alt="Sweat Brodé" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Sweat Brodé</div>
+          <div class="dp-product-price">€159.00</div>
+        </div>
+      </div>
+
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1602293589930-45aad59ba3ab?w=800&h=1000&fit=crop" alt="Short Sport" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Short Actif</div>
+          <div class="dp-product-price">€89.00</div>
+        </div>
+      </div>
+
+      <div class="stagger-item">
+        <div class="dp-product-card">
+          <div class="dp-product-card-wrapper">
+            <div class="dp-skeleton"></div>
+            <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&h=1000&fit=crop" alt="Accessoire" loading="lazy">
+          </div>
+        </div>
+        <div class="dp-product-info">
+          <div class="dp-product-name">Casquette Logo</div>
+          <div class="dp-product-price">€59.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="dp-container scroll-reveal">
+      <p style="text-align: center; margin-bottom: 20px;">© 2026 Daily Paper. Tous droits réservés.</p>
+      <p style="text-align: center; font-size: 11px; color: rgba(0,0,0,0.6);">
+        <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Mentions Légales</a>
+        <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Confidentialité</a>
+        <a href="#" style="color: inherit; text-decoration: none; margin: 0 10px;">Contact</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll Progress Bar
+    function updateScrollProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+    }
+
+    // Scroll Reveal Animation
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .stagger-item');
+      
+      reveals.forEach((element, index) => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          // Add stagger delay for stagger-item elements
+          if (element.classList.contains('stagger-item')) {
+            setTimeout(() => {
+              element.classList.add('revealed');
+            }, index * 100);
+          } else {
+            element.classList.add('revealed');
+          }
+        }
+      });
+    }
+
+    // Navbar Scroll Effect
+    function handleNavScroll() {
+      const nav = document.querySelector('.dp-nav');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }
+
+    // Parallax Effect
+    function handleParallax() {
+      const parallaxSections = document.querySelectorAll('.parallax-section');
+      
+      parallaxSections.forEach(section => {
+        const scrolled = window.scrollY;
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        
+        if (scrolled > sectionTop - window.innerHeight && scrolled < sectionTop + sectionHeight) {
+          const parallaxBg = section.querySelector('.parallax-bg');
+          const offset = (scrolled - sectionTop) * 0.5;
+          parallaxBg.style.transform = `translateY(${offset}px)`;
+        }
+      });
+    }
+
+    // Progressive Image Loading
+    function setupImageLoading() {
+      const productCards = document.querySelectorAll('.dp-product-card');
+      
+      productCards.forEach(card => {
+        const img = card.querySelector('img');
+        
+        // Check if image is already loaded
+        if (img.complete) {
+          card.classList.add('image-loaded');
+        } else {
+          img.addEventListener('load', () => {
+            setTimeout(() => {
+              card.classList.add('image-loaded');
+            }, 200);
+          });
+        }
+      });
+    }
+
+    // Intersection Observer for better performance (bidirectional)
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        } else {
+          // Remove revealed class when scrolling back up
+          entry.target.classList.remove('revealed');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all reveal elements
+    document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Stagger animation with delay (bidirectional)
+    const staggerItems = document.querySelectorAll('.stagger-item');
+    const staggerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const index = Array.from(staggerItems).indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('revealed');
+          }, index * 150);
+        } else {
+          // Remove revealed class when scrolling back up
+          entry.target.classList.remove('revealed');
+        }
+      });
+    }, observerOptions);
+
+    staggerItems.forEach(item => staggerObserver.observe(item));
+
+    // Event Listeners
+    window.addEventListener('scroll', () => {
+      updateScrollProgress();
+      handleNavScroll();
+      handleParallax();
+    });
+
+    window.addEventListener('load', () => {
+      revealOnScroll();
+      setupImageLoading();
+    });
+
+    // Initial calls
+    revealOnScroll();
+    setupImageLoading();
+    updateScrollProgress();
+  </script>
+</body>
+</html>
